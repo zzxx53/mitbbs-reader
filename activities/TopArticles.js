@@ -1,15 +1,16 @@
 import React from 'react';
-import { StyleSheet, Text, View, Alert, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Alert, ScrollView, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 var DOMParser = require('react-native-html-parser').DOMParser
 import Toolbar from '../fragments/Toolbar';
-import { windowWidth, statusBarHeight } from '../util/window'
+import { windowWidth, statusBarHeight } from '../util/window';
+import ThreadDisplay from './ThreadDisplay';
 
 export default class TopArticles extends React.Component {
     constructor(props) {
         super(props);
         this.state = { articles: [] }
-        this.getArticles(); fontSize
+        this.getArticles();
     }
     render() {
         const articleList = this.state.articles.map(article => {
@@ -17,7 +18,6 @@ export default class TopArticles extends React.Component {
         });
         return (
             <View style={styles.container}>
-                <Toolbar title="Home" navigation={this.props.navigation} />
                 <ScrollView style={styles.articleList}>
                     {articleList}
                 </ScrollView>
@@ -42,12 +42,16 @@ export default class TopArticles extends React.Component {
         const linkText = articleLink.textContent.trim();
         if (!linkText) { return null; }
         return (
-            <View key={articleLink.getAttribute("href")} style={styles.articleItem}>
+            <TouchableOpacity key={articleLink.getAttribute("href")} style={styles.articleItem} onPress={this.goToThread.bind(this, articleLink.getAttribute("href"))}>
                 <Text
                     style={{ color: 'black', fontSize: 20 }}
                 > {articleLink.textContent.trim()} </Text>
-            </View>
+            </TouchableOpacity>
         )
+    }
+    goToThread(url) {
+        console.log(url)
+        this.props.navigation.navigate('ThreadDisplay', { url })
     }
 }
 
@@ -57,7 +61,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         flexDirection: "column",
         justifyContent: "space-between",
-        paddingTop: 25
     },
     articleList: {
         flex: 1,

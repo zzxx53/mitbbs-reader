@@ -1,18 +1,16 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import axios from 'axios';
 var DOMParser = require('react-native-html-parser').DOMParser
-import Toolbar from '../fragments/Toolbar';
 
-export default class TopArticles extends React.Component {
+export default class ThreadDisplay extends React.Component {
     constructor(props) {
         super(props);
     }
     render() {
         return (
             <View style={styles.container}>
-                <Toolbar title="Home" />
-                <Text>Big 10</Text>
+                <Text>{this.props.navigation.getParam('url')}</Text>
             </View>
         );
     }
