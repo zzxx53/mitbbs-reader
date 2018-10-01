@@ -1,15 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View, Alert, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Alert, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 var DOMParser = require('react-native-html-parser').DOMParser
-import Toolbar from '../fragments/Toolbar';
+import { connect } from 'react-redux'
 import { windowWidth, statusBarHeight } from '../util/window';
 import ThreadDisplay from './ThreadDisplay';
+import { setTitle } from '../store/actions'
 
-export default class TopArticles extends React.Component {
+class TopArticles extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { articles: [] }
+        this.state = { articles: [], isLoading: true };
+        this.props.dispatch(setTitle("Top Articles"))
         this.getArticles();
     }
     render() {
@@ -18,9 +20,12 @@ export default class TopArticles extends React.Component {
         });
         return (
             <View style={styles.container}>
-                <ScrollView style={styles.articleList}>
-                    {articleList}
-                </ScrollView>
+                {this.state.isLoading ?
+                    <ActivityIndicator size='large' color='grey' /> :
+                    <ScrollView style={styles.articleList}>
+                        {articleList}
+                    </ScrollView>
+                }
             </View>
         );
     }
@@ -28,6 +33,7 @@ export default class TopArticles extends React.Component {
         axios.get('http://www.mitbbs.com/mwap/forum/request/top.php').then(response => {
             this.parseArticles(response.data);
         }).catch(error => {
+            this.setState({ isLoading: false })
             Alert.alert('Error loading', '', [{ text: 'OK' }])
         })
     }
@@ -36,11 +42,12 @@ export default class TopArticles extends React.Component {
         const pageContent = data.detail.content.replace("\\\"", "\"");
         const oDOM = oParser.parseFromString(pageContent, "text/html");
         const articles = oDOM.querySelect('li[class="article_list_nopic"] a').reverse();
-        this.setState({ articles })
+        this.setState({ articles, isLoading: false })
     }
     generateArticleLink(articleLink) {
         const linkText = articleLink.textContent.trim();
         if (!linkText) { return null; }
+        if (this.isAd(articleLink)) { return null }
         return (
             <TouchableOpacity key={articleLink.getAttribute("href")} style={styles.articleItem} onPress={this.goToThread.bind(this, articleLink.getAttribute("href"))}>
                 <Text
@@ -53,6 +60,15 @@ export default class TopArticles extends React.Component {
         console.log(url)
         this.props.navigation.navigate('ThreadDisplay', { url })
     }
+    isAd(articleLink) {
+        return articleLink.parentNode.parentNode.querySelect('p[class="commen_p"]')[0].textContent.includes("广告")
+    }
+    static navigationOptions = ({ navigation, navigationOptions }) => {
+        const { params } = navigation.state;
+        return {
+            title: 'Top Articles',
+        };
+    };
 }
 
 const styles = StyleSheet.create({
@@ -74,3 +90,5 @@ const styles = StyleSheet.create({
         width: windowWidth
     }
 });
+
+export default connect()(TopArticles);

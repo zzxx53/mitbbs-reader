@@ -1,11 +1,18 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import Navigator from './router/routes';
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import reducer from './store/reducer'
+
+const store = createStore(reducer)
 
 export default class App extends React.Component {
   render() {
     return (
-      <Navigator />
+      <Provider store={store}>
+        <Navigator />
+      </Provider>
     );
   }
 }

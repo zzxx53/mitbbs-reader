@@ -8,12 +8,21 @@ import TopArticles from '../activities/TopArticles';
 import Login from '../activities/Login';
 import BigTenArticles from '../activities/BigTenArticles';
 import ThreadDisplay from '../activities/ThreadDisplay';
+import DrawerView from '../fragments/DrawerView';
+import AppTitle from '../fragments/AppTitle';
 
+// actual menu content is in DrawerView; all compoments needs to be added to route config map (first param of createDrawerNavigator) 
 const DrawerNavigator = createDrawerNavigator({
     TopArticles: { screen: TopArticles },
     Login: { screen: Login },
-    BigTenArticles: { screen: BigTenArticles }
-});
+    BigTenArticles: { screen: BigTenArticles },
+    ThreadDisplay: { screen: ThreadDisplay }
+}, {
+        initialRouteName: 'TopArticles',
+        contentComponent: DrawerView,
+        drawerWidth: 300
+    }
+);
 
 const MenuImage = ({ navigation }) => {
     if (!navigation.state.isDrawerOpen) {
@@ -23,13 +32,12 @@ const MenuImage = ({ navigation }) => {
     }
 }
 
-
+// need this mainly for the header bar, so only has one route configured
 const StackNavigator = createStackNavigator({
-    DrawerNavigator: { screen: DrawerNavigator },
-    ThreadDisplay: { screen: ThreadDisplay }
+    DrawerNavigator: { screen: DrawerNavigator }
 }, {
         navigationOptions: ({ navigation }) => ({
-            title: 'ReactNavigation',  // Title to appear in status bar
+            headerTitle: <AppTitle />,
             headerLeft:
                 <TouchableOpacity onPress={() => { navigation.dispatch(DrawerActions.toggleDrawer()) }} style={{ paddingLeft: 10 }}>
                     <MenuImage style="styles.bar" navigation={navigation} />
