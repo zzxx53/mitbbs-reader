@@ -19,20 +19,30 @@ class DrawerScreen extends Component {
                 <ScrollView>
                     <View>
                         <View style={styles.menuItem}>
-                            <Text onPress={this.navigateToScreen('TopArticles')}>
-                                TopArticles
-              </Text>
+                            <Text onPress={this.navigateToScreen('Login')}>
+                                登录</Text>
                         </View>
                         <View style={styles.menuItem}>
-                            <Text onPress={this.navigateToScreen('Login')}>
-                                Login
-              </Text>
+                            <Text onPress={this.navigateToScreen('TopArticles')}>
+                                置顶文章</Text>
                         </View>
                         <View style={styles.menuItem}>
                             <Text onPress={this.navigateToScreen('BigTenArticles')}>
-                                BigTenArticles
-              </Text>
+                                热门推荐</Text>
                         </View>
+                        <View style={styles.menuItem}>
+                            <Text onPress={this.navigateToScreen('BigTenArticles')}>
+                                论坛集萃</Text>
+                        </View>
+                        <View style={styles.menuItem}>
+                            <Text onPress={this.navigateToScreen('BoardList')}>
+                                分类讨论区</Text>
+                        </View>
+                        <View style={styles.menuItem}>
+                            <Text onPress={this.navigateToScreen('BigTenArticles')}>
+                                搜索</Text>
+                        </View>
+
                     </View>
                 </ScrollView>
             </View>

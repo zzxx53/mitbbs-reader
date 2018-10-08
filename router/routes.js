@@ -10,13 +10,17 @@ import BigTenArticles from '../activities/BigTenArticles';
 import ThreadDisplay from '../activities/ThreadDisplay';
 import DrawerView from '../fragments/DrawerView';
 import AppTitle from '../fragments/AppTitle';
+import BoardArticles from '../activities/BoardArticles';
+import BoardList from '../activities/BoardList';
 
 // actual menu content is in DrawerView; all compoments needs to be added to route config map (first param of createDrawerNavigator) 
 const DrawerNavigator = createDrawerNavigator({
     TopArticles: { screen: TopArticles },
     Login: { screen: Login },
     BigTenArticles: { screen: BigTenArticles },
-    ThreadDisplay: { screen: ThreadDisplay }
+    ThreadDisplay: { screen: ThreadDisplay },
+    BoardArticles: { screen: BoardArticles },
+    BoardList: { screen: BoardList }
 }, {
         initialRouteName: 'TopArticles',
         contentComponent: DrawerView,

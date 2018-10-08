@@ -5,7 +5,7 @@ import { Text } from 'react-native';
 class AppTitle extends React.Component {
   render() {
     return (
-      <Text style={{ color: 'white', fontSize: 20 }}>
+      <Text style={{ color: 'white', fontSize: 16 }}>
         {this.props.appTitle}
       </Text>
     );
